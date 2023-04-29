@@ -10,11 +10,11 @@ const ResetConfirmationModal = (props: IProps) => {
         <Dialog
             open={true}
             onClose={props.onCancelReset}>
-            <DialogTitle id="alert-dialog-title">
+            <DialogTitle id="reset-confirmation-alert-dialog-title">
                 Reset Command
             </DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText id="reset-confirmation-alert-dialog-description">
                     Are you sure that you want to reset?
                 </DialogContentText>
             </DialogContent>
