@@ -119,7 +119,7 @@ const ChatContainer = () => {
 
             let direction: Direction;
 
-            if (locationDirection[2] === Direction.NORTH.toString()) {
+            if (locationDirection[2] === Direction.NORTH) {
                 direction = Direction.NORTH;
             } else if (locationDirection[2] === Direction.SOUTH) {
                 direction = Direction.SOUTH;
@@ -132,13 +132,13 @@ const ChatContainer = () => {
             }
 
             return new PlaceCommand(position, direction);
-        } else if (message.includes(CommandType.MOVE)) {
+        } else if (message === CommandType.MOVE) {
             return new MoveCommand();
-        } else if (message.includes(CommandType.LEFT)) {
+        } else if (message === CommandType.LEFT) {
             return new LeftCommand();
-        } else if (message.includes(CommandType.RIGHT)) {
+        } else if (message === CommandType.RIGHT) {
             return new RightCommand();
-        } else if (message.includes(CommandType.REPORT)) {
+        } else if (message === CommandType.REPORT) {
             return new ReportCommand();
         }
         return undefined;
@@ -244,6 +244,8 @@ const ChatContainer = () => {
     const handleOnConfirmReset = () => {
         setShowResetDialog(false);
         setShowResetButton(false);
+        setShowViewPositionDialog(false);
+        setShowViewPositionButton(false);
         setValidCommands([]);
         setMessages([]);
         let position: Position = {
