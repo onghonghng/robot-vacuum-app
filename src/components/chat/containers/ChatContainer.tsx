@@ -132,13 +132,13 @@ const ChatContainer = () => {
             }
 
             return new PlaceCommand(position, direction);
-        } else if (message.includes(CommandType.MOVE)) {
+        } else if (message === CommandType.MOVE) {
             return new MoveCommand();
-        } else if (message.includes(CommandType.LEFT)) {
+        } else if (message === CommandType.LEFT) {
             return new LeftCommand();
-        } else if (message.includes(CommandType.RIGHT)) {
+        } else if (message === CommandType.RIGHT) {
             return new RightCommand();
-        } else if (message.includes(CommandType.REPORT)) {
+        } else if (message === CommandType.REPORT) {
             return new ReportCommand();
         }
         return undefined;
