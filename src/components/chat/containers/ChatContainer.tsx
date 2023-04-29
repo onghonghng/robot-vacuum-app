@@ -244,6 +244,8 @@ const ChatContainer = () => {
     const handleOnConfirmReset = () => {
         setShowResetDialog(false);
         setShowResetButton(false);
+        setShowViewPositionDialog(false);
+        setShowViewPositionButton(false);
         setValidCommands([]);
         setMessages([]);
         let position: Position = {
