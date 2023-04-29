@@ -100,4 +100,28 @@ describe('ChatContainer', () => {
         expect(spanMessageComponentContent1.textContent).toBe(inputValue);
         expect(spanMessageComponentContent2.textContent).toBe(expectedOutput);
     });
+
+    test('Command with Invalid Commands', () => {
+        render(<ChatContainer />);
+        const inputValue = 'Hello world!';
+        const expectedOutput = "I don't quite undestand the command that you've just sent.\n\nCan you try again with the valid commands?";
+        
+        const inputCommand: HTMLTextAreaElement = screen.getByTestId(TEST_ID_INPUT_COMMAND);
+        const buttonSend: HTMLElement = screen.getByTestId(TEST_ID_BUTTON_SEND);
+        const containerIntroductionComponent = screen.getByTestId(TEST_ID_INTRODUCTION_COMPONENT);
+
+        expect(containerIntroductionComponent).toBeInTheDocument();
+        
+        fireEvent.change(inputCommand, { target: { value: inputValue } });
+        expect(inputCommand.value).toBe(inputValue);
+        
+        fireEvent.click(buttonSend);
+        
+        const spanMessageComponentContent1: HTMLSpanElement = screen.getByTestId(TEST_ID_MESSAGE_COMPONENT_CONTENT_PREFIX + '-0');
+        const spanMessageComponentContent2: HTMLSpanElement = screen.getByTestId(TEST_ID_MESSAGE_COMPONENT_CONTENT_PREFIX + '-1');
+        
+        expect(screen.queryByTestId(TEST_ID_INTRODUCTION_COMPONENT)).not.toBeInTheDocument();
+        expect(spanMessageComponentContent1.textContent).toBe(inputValue);
+        expect(spanMessageComponentContent2.textContent).toBe(expectedOutput);
+    });
 });
