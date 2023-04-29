@@ -61,7 +61,7 @@ const CommandComponent = (props: IProps) => {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="caption" display="block">
-                        A Robot Vacuum App powered by ReactJS. Developed by Ong Hong Hng.
+                        Powered by ReactJS. Developed by Ong Hong Hng.
                     </Typography>
                 </Grid>
             </Grid>
