@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/robot-vacuum-app/static/css/main.493dd917.css",
-    "main.js": "/robot-vacuum-app/static/js/main.91a18748.js",
+    "main.js": "/robot-vacuum-app/static/js/main.1ce880ba.js",
     "static/js/787.34ead67b.chunk.js": "/robot-vacuum-app/static/js/787.34ead67b.chunk.js",
     "index.html": "/robot-vacuum-app/index.html",
     "main.493dd917.css.map": "/robot-vacuum-app/static/css/main.493dd917.css.map",
-    "main.91a18748.js.map": "/robot-vacuum-app/static/js/main.91a18748.js.map",
+    "main.1ce880ba.js.map": "/robot-vacuum-app/static/js/main.1ce880ba.js.map",
     "787.34ead67b.chunk.js.map": "/robot-vacuum-app/static/js/787.34ead67b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.493dd917.css",
-    "static/js/main.91a18748.js"
+    "static/js/main.1ce880ba.js"
   ]
 }
