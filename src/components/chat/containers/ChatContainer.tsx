@@ -119,7 +119,7 @@ const ChatContainer = () => {
 
             let direction: Direction;
 
-            if (locationDirection[2] === Direction.NORTH.toString()) {
+            if (locationDirection[2] === Direction.NORTH) {
                 direction = Direction.NORTH;
             } else if (locationDirection[2] === Direction.SOUTH) {
                 direction = Direction.SOUTH;
