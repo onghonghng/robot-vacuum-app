@@ -16,7 +16,8 @@ import { Message } from '../../../interfaces/message/Message';
 import { MessageType } from '../../../interfaces/message/MessageType';
 import MessagesContainer from './MessagesContainer';
 import IntroductionComponent from '../components/IntroductionComponent';
-import ResetConfirmationDialog from '../components/ResetConfirmationModal';
+import ResetConfirmationDialog from '../components/ResetConfirmationDialog';
+import ViewPositionDialog from '../components/ViewPositionDialog';
 
 const MIN_POSITION_X = 0;
 const MIN_POSITION_Y = 0;
@@ -32,6 +33,8 @@ const ChatContainer = () => {
     const [processing, setProcessing] = useState<boolean>(false);
     const [showResetDialog, setShowResetDialog] = useState<boolean>(false);
     const [showResetButton, setShowResetButton] = useState<boolean>(false);
+    const [showViewPositionDialog, setShowViewPositionDialog] = useState<boolean>(false);
+    const [showViewPositionButton, setShowViewPositionButton] = useState<boolean>(false);
 
     useEffect(() => {
         if (validCommands.length > 0) {
@@ -148,13 +151,20 @@ const ChatContainer = () => {
             position: position,
             direction: direction
         }
+        let hasError: boolean = false;
+        let errorMessage: string = "";
         validCommands.forEach(command => {
             if (command instanceof PlaceCommand) {
                 const placeCommand: PlaceCommand = command as PlaceCommand;
-                robotVacuum.position.x = placeCommand.position.x;
-                robotVacuum.position.y = placeCommand.position.y;
-                robotVacuum.direction = placeCommand.direction;
-            } else if (command instanceof MoveCommand) {
+                if (placeCommand.position.x >= MIN_POSITION_X && placeCommand.position.y >= MIN_POSITION_Y && placeCommand.position.x <= MAX_POSITION_X && placeCommand.position.y <= MAX_POSITION_Y) {
+                    robotVacuum.position.x = placeCommand.position.x;
+                    robotVacuum.position.y = placeCommand.position.y;
+                    robotVacuum.direction = placeCommand.direction;
+                } else {
+                    hasError = true;
+                    errorMessage = "Please enter a PLACE command that is within " + MIN_POSITION_X + "," + MIN_POSITION_Y + " and " +  MAX_POSITION_X + "," + MAX_POSITION_Y + ".";
+                }
+            } else if (command instanceof MoveCommand && !hasError) {
                 if (robotVacuum.direction === Direction.NORTH) {
                     const plannedPositionY = robotVacuum.position.y + 1;
                     if (plannedPositionY <= MAX_POSITION_Y) {
@@ -176,7 +186,7 @@ const ChatContainer = () => {
                         robotVacuum.position.x = plannedPositionX;
                     }
                 }
-            } else if (command instanceof LeftCommand) {
+            } else if (command instanceof LeftCommand && !hasError) {
                 if (robotVacuum.direction === Direction.NORTH) {
                     robotVacuum.direction = Direction.WEST;
                 } else if (robotVacuum.direction === Direction.SOUTH) {
@@ -186,7 +196,7 @@ const ChatContainer = () => {
                 } else if (robotVacuum.direction === Direction.WEST) {
                     robotVacuum.direction = Direction.SOUTH;
                 }
-            } else if (command instanceof RightCommand) {
+            } else if (command instanceof RightCommand && !hasError) {
                 if (robotVacuum.direction === Direction.NORTH) {
                     robotVacuum.direction = Direction.EAST;
                 } else if (robotVacuum.direction === Direction.SOUTH) {
@@ -200,13 +210,27 @@ const ChatContainer = () => {
                 setTimeout(() => {
                     setProcessing(false);
                 }, 300);
-                let content: string = robotVacuum.position.x + "," + robotVacuum.position.y + "," + robotVacuum.direction;
+                let content: string = "";
+                if (hasError) {
+                    content = errorMessage;
+                } else {
+                    content = robotVacuum.position.x + "," + robotVacuum.position.y + "," + robotVacuum.direction;
+                }
                 addMessage(content, MessageType.RECEIVE);
                 setScrollToBottom(true);
+                setShowViewPositionButton(true);
             }
             setRobotVacuum(robotVacuum);
             
         });
+    }
+
+    const handleOnClickViewPosition = () => {
+        setShowViewPositionDialog(true);
+    }
+
+    const handleOnCloseViewPosition = () => {
+        setShowViewPositionDialog(false);
     }
 
     const handleOnClickReset = () => {
@@ -245,8 +269,9 @@ const ChatContainer = () => {
                     <AppBar position="sticky" className='app-bar'>
                         <Toolbar>
                             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                                Robovac
+                                RoboVac
                             </Typography>
+                            {showViewPositionButton && <Button color="inherit" onClick={handleOnClickViewPosition}>View Position</Button>}
                             {showResetButton && <Button color="inherit" onClick={handleOnClickReset}>Reset</Button>}
                         </Toolbar>
                     </AppBar>
@@ -269,6 +294,7 @@ const ChatContainer = () => {
                 <CommandComponent onSend={handleOnSendForCommandComponent} processing={processing} />
             </Grid>
             {showResetDialog && <ResetConfirmationDialog onConfirmReset={handleOnConfirmReset} onCancelReset={handleOnCancelReset} />}
+            {showViewPositionDialog && robotVacuum && <ViewPositionDialog position={robotVacuum.position} direction={robotVacuum.direction} onClose={handleOnCloseViewPosition} />}
         </Grid>
     )
 }
