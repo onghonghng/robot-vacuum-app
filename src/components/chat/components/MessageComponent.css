@@ -1,0 +1,45 @@
+.sent-message-row {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.received-message-row {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.message {
+    max-width:240px;
+    display: flex;
+    justify-content: flex-end;
+    font-weight: 500;
+    font-size: 15px;
+    animation: fadeIn 0.25s;
+}
+
+.sent-message {
+    background-color: #f8631f;
+    color: #ffffff;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 16px;
+}
+
+.received-message {
+    background-color: #f5f7fb;
+    color: #606060;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 0px;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

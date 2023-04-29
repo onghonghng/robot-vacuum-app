@@ -1,0 +1,30 @@
+body {
+    overflow-y: hidden;
+}
+
+.header-app-bar {
+    width: 100vw;
+    max-height: 0;
+}
+
+.chat-body-content {
+    width: 100vw;
+    max-height: calc(100vh - 86px - 64px);
+    overflow-y: auto;
+    display: flex;
+    align-items: flex-start;
+    transition: transform 0.3s ease-out;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 85px;
+    background-color: #f5f5f5;
+    display: block;
+}
+
+.app-bar {
+    background-color: #242a2e !important;
+}

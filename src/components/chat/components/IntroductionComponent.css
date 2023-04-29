@@ -1,0 +1,18 @@
+.introduction-command-text {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.introduction-command-description {
+    font-weight: 300 !important;
+    background-color: #ffece5 !important;
+    font-size: 15px;
+    border-radius: 12px !important;
+}
+
+.introduction-rules-description {
+    font-weight: 300 !important;
+    background-color: #ffece5 !important;
+    font-size: 15px;
+    border-radius: 12px !important;
+}
