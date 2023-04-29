@@ -1,46 +1,43 @@
-# Getting Started with Create React App
+# Robot Vacuum ReactJS Application
+
+Prepared by: Ong Hong Hng
+
+This project is a ReactJS web app that simulates a robot vacuum in an area of dimensions 5 units by 5 units. 
+
+Visit [https://onghonghng.github.io/robot-vacuum-app/](https://onghonghng.github.io/robot-vacuum-app/) to give it a try!
+
+The application is deployed using GitHub Pages.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+The followings are the brief explanation of the project. 
 
-In the project directory, you can run:
+## Requirements
 
-### `npm start`
+- The application is managed by yarn, so yarn is required on the system.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Design
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- The application allows the user to chat with the robot vacuum. Commands are sent as a form of a message, and the output is replied as a message. There is a form of conversation between the user and the robot vacuum.
 
-### `npm test`
+## Assumptions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- The minimum x and y coordinate allowed for the PLACE command is 0.
+    - The lowest possible x,y position is 0,0.
+- The maximum x and y coordinate allowed for the PLACE command is 5.
+    - The lowest possible x,y position is 5,5.
 
-### `npm run build`
+## Instructions
+### Running the Application in Local Machine
+1.	Please clone the repository to your local machine to run or test the application.
+2.	In the project directory, open a terminal window or command prompt.
+3.	Install the required dependencies by running the following command: `yarn install`
+4.	To run the app in the development mode, run: `yarn start`
+5.	Open[http://localhost:3000](http://localhost:3000) to view it in the browser.
+6.	To run the tests of the app, run: `yarn test`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Commanding the Robot Vacuum
+1.	Enter a command in the text field and press the `send` button.
+2.	The command will be processed and the output will be returned.
+3.	`View Position` button gives a visual representation of the current position and direction of the robot vacuum.
+4.	`Reset` button sets the robot vacuum back to the original state.
