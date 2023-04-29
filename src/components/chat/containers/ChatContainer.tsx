@@ -199,10 +199,10 @@ const ChatContainer = () => {
             } else if (command instanceof ReportCommand) {
                 setTimeout(() => {
                     setProcessing(false);
-                    let content: string = robotVacuum.position.x + "," + robotVacuum.position.y + "," + robotVacuum.direction;
-                    addMessage(content, MessageType.RECEIVE);
-                    setScrollToBottom(true);
                 }, 300);
+                let content: string = robotVacuum.position.x + "," + robotVacuum.position.y + "," + robotVacuum.direction;
+                addMessage(content, MessageType.RECEIVE);
+                setScrollToBottom(true);
             }
             setRobotVacuum(robotVacuum);
             
