@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/robot-vacuum-app/static/css/main.073c9b0a.css",
-    "main.js": "/robot-vacuum-app/static/js/main.9b2a7033.js",
+    "main.css": "/robot-vacuum-app/static/css/main.493dd917.css",
+    "main.js": "/robot-vacuum-app/static/js/main.91a18748.js",
     "static/js/787.34ead67b.chunk.js": "/robot-vacuum-app/static/js/787.34ead67b.chunk.js",
-    "static/media/logo.svg": "/robot-vacuum-app/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/robot-vacuum-app/index.html",
-    "main.073c9b0a.css.map": "/robot-vacuum-app/static/css/main.073c9b0a.css.map",
-    "main.9b2a7033.js.map": "/robot-vacuum-app/static/js/main.9b2a7033.js.map",
+    "main.493dd917.css.map": "/robot-vacuum-app/static/css/main.493dd917.css.map",
+    "main.91a18748.js.map": "/robot-vacuum-app/static/js/main.91a18748.js.map",
     "787.34ead67b.chunk.js.map": "/robot-vacuum-app/static/js/787.34ead67b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.9b2a7033.js"
+    "static/css/main.493dd917.css",
+    "static/js/main.91a18748.js"
   ]
 }
