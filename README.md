@@ -14,7 +14,7 @@ The followings are the brief explanation of the project.
 
 ## Requirements
 
-- The application is managed by yarn, so yarn is required on the system.
+- The application is managed by `yarn`, so `yarn` is required on the system.
 
 ## Design
 
@@ -22,10 +22,10 @@ The followings are the brief explanation of the project.
 
 ## Assumptions
 
-- The minimum x and y coordinate allowed for the PLACE command is 0.
-    - The lowest possible x,y position is 0,0.
-- The maximum x and y coordinate allowed for the PLACE command is 5.
-    - The lowest possible x,y position is 5,5.
+- The minimum x and y coordinate allowed for the `PLACE` command is `0`.
+    - The lowest possible x,y position is `0,0`.
+- The maximum x and y coordinate allowed for the `PLACE` command is `5`.
+    - The highest possible x,y position is `5,5`.
 
 ## Instructions
 ### Running the Application in Local Machine
@@ -33,7 +33,7 @@ The followings are the brief explanation of the project.
 2.	In the project directory, open a terminal window or command prompt.
 3.	Install the required dependencies by running the following command: `yarn install`
 4.	To run the app in the development mode, run: `yarn start`
-5.	Open[http://localhost:3000](http://localhost:3000) to view it in the browser.
+5.	Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 6.	To run the tests of the app, run: `yarn test`
 
 ### Commanding the Robot Vacuum
