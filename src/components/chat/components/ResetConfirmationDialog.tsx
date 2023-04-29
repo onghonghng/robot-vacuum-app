@@ -5,7 +5,7 @@ interface IProps {
     onCancelReset: () => void
 }
 
-const ResetConfirmationModal = (props: IProps) => {
+const ResetConfirmationDialog = (props: IProps) => {
     return (
         <Dialog
             open={true}
@@ -28,4 +28,4 @@ const ResetConfirmationModal = (props: IProps) => {
     )
 }
 
-export default ResetConfirmationModal;
+export default ResetConfirmationDialog;

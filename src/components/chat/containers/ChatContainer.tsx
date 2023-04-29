@@ -16,7 +16,7 @@ import { Message } from '../../../interfaces/message/Message';
 import { MessageType } from '../../../interfaces/message/MessageType';
 import MessagesContainer from './MessagesContainer';
 import IntroductionComponent from '../components/IntroductionComponent';
-import ResetConfirmationModal from '../components/ResetConfirmationModal';
+import ResetConfirmationDialog from '../components/ResetConfirmationModal';
 
 const MIN_POSITION_X = 0;
 const MIN_POSITION_Y = 0;
@@ -30,7 +30,7 @@ const ChatContainer = () => {
     const bodyContentRef = useRef<HTMLDivElement>(null);
     const [scrollToBottom, setScrollToBottom] = useState<boolean>(false);
     const [processing, setProcessing] = useState<boolean>(false);
-    const [showResetModal, setShowResetModal] = useState<boolean>(false);
+    const [showResetDialog, setShowResetDialog] = useState<boolean>(false);
     const [showResetButton, setShowResetButton] = useState<boolean>(false);
 
     useEffect(() => {
@@ -210,15 +210,15 @@ const ChatContainer = () => {
     }
 
     const handleOnClickReset = () => {
-        setShowResetModal(true);
+        setShowResetDialog(true);
     }
 
     const handleOnCancelReset = () => {
-        setShowResetModal(false);
+        setShowResetDialog(false);
     }
 
     const handleOnConfirmReset = () => {
-        setShowResetModal(false);
+        setShowResetDialog(false);
         setShowResetButton(false);
         setValidCommands([]);
         setMessages([]);
@@ -268,7 +268,7 @@ const ChatContainer = () => {
                 <Divider />
                 <CommandComponent onSend={handleOnSendForCommandComponent} processing={processing} />
             </Grid>
-            {showResetModal && <ResetConfirmationModal onConfirmReset={handleOnConfirmReset} onCancelReset={handleOnCancelReset} />}
+            {showResetDialog && <ResetConfirmationDialog onConfirmReset={handleOnConfirmReset} onCancelReset={handleOnCancelReset} />}
         </Grid>
     )
 }
