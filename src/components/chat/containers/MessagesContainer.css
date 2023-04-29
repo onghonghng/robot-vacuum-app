@@ -1,0 +1,9 @@
+.messages-container {
+    width: 100%;
+}
+
+.conversations {
+    overflow-y: auto;
+    align-items: start;
+    justify-content: start;
+}
