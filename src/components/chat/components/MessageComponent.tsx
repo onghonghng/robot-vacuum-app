@@ -22,7 +22,7 @@ const MessageComponent = (props: IProps) => {
             padding={theme.spacing(1)}>
             <Grid className={classnames('message', { 'sent-message': props.sent, 'received-message': !props.sent })}>
                 <Grid item xs={12}>
-                    <Box whiteSpace="pre-wrap" padding={theme.spacing(2.5)}>
+                    <Box whiteSpace="pre-wrap" padding={theme.spacing(2)}>
                         <span data-testid={TEST_ID_MESSAGE_COMPONENT_CONTENT_PREFIX + '-' + props.index}>
                             {props.content}
                         </span>

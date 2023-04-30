@@ -23,6 +23,7 @@ const MIN_POSITION_X = 0;
 const MIN_POSITION_Y = 0;
 const MAX_POSITION_X = 5;
 const MAX_POSITION_Y = 5;
+
 const ChatContainer = () => {
 
     const [validCommands, setValidCommands] = useState<Command[]>([]);
@@ -35,30 +36,7 @@ const ChatContainer = () => {
     const [showResetButton, setShowResetButton] = useState<boolean>(false);
     const [showViewPositionDialog, setShowViewPositionDialog] = useState<boolean>(false);
     const [showViewPositionButton, setShowViewPositionButton] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (validCommands.length > 0) {
-            commandRobotVacuuum();
-        } else {
-            let position: Position = {
-                x: 0,
-                y: 0
-            };
-            let direction: Direction = Direction.NORTH;
-            let newRobotVacuum: RobotVacuum = {
-                position: position,
-                direction: direction
-            }
-            setRobotVacuum(newRobotVacuum);
-            setProcessing(false);
-
-            if (messages.length > 0) {
-                const content = "I don't quite undestand the command that you've just sent.\n\nCan you try again with the valid commands?"
-                addMessage(content, MessageType.RECEIVE);
-                setScrollToBottom(true);
-            }
-        }
-    }, [validCommands]);
+    const [hasFirstPlaceCommand, setHasFirstPlaceCommand] = useState<boolean>(false);
 
     useEffect(() => {
         if (scrollToBottom) {
@@ -84,28 +62,47 @@ const ChatContainer = () => {
 
     const handleOnSendForCommandComponent = (commandMessages: string) => {
         setProcessing(true);
-
+        commandMessages.trim();
         addMessage(commandMessages, MessageType.SEND);
         setScrollToBottom(true);
         setShowResetButton(true);
 
         const commands: string[] = commandMessages.split("\n");
-        let hasFirstPlaceCommand: boolean = false;
-        let validCommandsFromInput: Command[] = [];
+        let validCommandsFromInput: Command[] = validCommands;
+        let hasInvalidCommands: boolean = false;
+        let numberOfNewValidCommands: number = 0;
         commands.forEach((message) => {
-            const command: Command | undefined = mapMessageToCommand(message);
-            if (command) {
-                if (hasFirstPlaceCommand) {
+            if (message !== "") {
+                const command: Command | undefined = mapMessageToCommand(message);
+                if (command) {
                     validCommandsFromInput.push(command);
+                    numberOfNewValidCommands++;
                 } else {
-                    if (command instanceof PlaceCommand) {
-                        hasFirstPlaceCommand = true;
-                        validCommandsFromInput.push(command);
-                    }
+                    hasInvalidCommands = true;
                 }
             }
         });
+
+        if (hasInvalidCommands && numberOfNewValidCommands === 0) {
+            const content = "I don't quite undestand the command that you've just sent.\n\nCan you try again with the valid commands?"
+            addMessage(content, MessageType.RECEIVE);
+            setScrollToBottom(true);
+        }
+
+        const indexOfFirstPlaceCommand = validCommandsFromInput.findIndex(command => command instanceof PlaceCommand);
+        if (indexOfFirstPlaceCommand === -1 && !hasFirstPlaceCommand) {
+            const content = "Seems like there isn't any PLACE command yet.\n\nThe first valid command is a PLACE command.\n\nAll commands in the sequence will be discarded until a valid PLACE command has been executed."
+            addMessage(content, MessageType.RECEIVE);
+            setScrollToBottom(true);
+            setProcessing(false);
+        }
+
+        if (validCommandsFromInput.length === 0) {
+            setProcessing(false);
+        }
+
         setValidCommands(validCommandsFromInput);
+        commandRobotVacuuum();
     }
 
     const mapMessageToCommand = (message: string): Command | undefined => {
@@ -145,84 +142,120 @@ const ChatContainer = () => {
     }
 
     const commandRobotVacuuum = () => {
-        let position: Position = { x: 0, y: 0 };
-        let direction: Direction = Direction.NORTH;
-        let robotVacuum: RobotVacuum = {
-            position: position,
-            direction: direction
+        const indexOfFirstPlaceCommand = validCommands.findIndex(command => command instanceof PlaceCommand);
+        let hasPlaceCommand = hasFirstPlaceCommand;
+        if (!hasFirstPlaceCommand) {
+            hasPlaceCommand = indexOfFirstPlaceCommand > -1;
+            setHasFirstPlaceCommand(hasPlaceCommand);
         }
-        let hasError: boolean = false;
-        let errorMessage: string = "";
-        validCommands.forEach(command => {
-            if (command instanceof PlaceCommand) {
-                const placeCommand: PlaceCommand = command as PlaceCommand;
-                if (placeCommand.position.x >= MIN_POSITION_X && placeCommand.position.y >= MIN_POSITION_Y && placeCommand.position.x <= MAX_POSITION_X && placeCommand.position.y <= MAX_POSITION_Y) {
-                    robotVacuum.position.x = placeCommand.position.x;
-                    robotVacuum.position.y = placeCommand.position.y;
-                    robotVacuum.direction = placeCommand.direction;
-                } else {
-                    hasError = true;
-                    errorMessage = "Please enter a PLACE command that is within " + MIN_POSITION_X + "," + MIN_POSITION_Y + " and " +  MAX_POSITION_X + "," + MAX_POSITION_Y + ".";
-                }
-            } else if (command instanceof MoveCommand && !hasError) {
-                if (robotVacuum.direction === Direction.NORTH) {
-                    const plannedPositionY = robotVacuum.position.y + 1;
-                    if (plannedPositionY <= MAX_POSITION_Y) {
-                        robotVacuum.position.y = plannedPositionY;
-                    }
-                } else if (robotVacuum.direction === Direction.SOUTH) {
-                    const plannedPositionY = robotVacuum.position.y - 1;
-                    if (plannedPositionY >= MIN_POSITION_Y) {
-                        robotVacuum.position.y = plannedPositionY;
-                    }
-                } else if (robotVacuum.direction === Direction.EAST) {
-                    const plannedPositionX = robotVacuum.position.x + 1;
-                    if (plannedPositionX <= MAX_POSITION_X) {
-                        robotVacuum.position.x = plannedPositionX;
-                    }
-                } else if (robotVacuum.direction === Direction.WEST) {
-                    const plannedPositionX = robotVacuum.position.x - 1;
-                    if (plannedPositionX >= MIN_POSITION_X) {
-                        robotVacuum.position.x = plannedPositionX;
-                    }
-                }
-            } else if (command instanceof LeftCommand && !hasError) {
-                if (robotVacuum.direction === Direction.NORTH) {
-                    robotVacuum.direction = Direction.WEST;
-                } else if (robotVacuum.direction === Direction.SOUTH) {
-                    robotVacuum.direction = Direction.EAST;
-                } else if (robotVacuum.direction === Direction.EAST) {
-                    robotVacuum.direction = Direction.NORTH;
-                } else if (robotVacuum.direction === Direction.WEST) {
-                    robotVacuum.direction = Direction.SOUTH;
-                }
-            } else if (command instanceof RightCommand && !hasError) {
-                if (robotVacuum.direction === Direction.NORTH) {
-                    robotVacuum.direction = Direction.EAST;
-                } else if (robotVacuum.direction === Direction.SOUTH) {
-                    robotVacuum.direction = Direction.WEST;
-                } else if (robotVacuum.direction === Direction.EAST) {
-                    robotVacuum.direction = Direction.SOUTH;
-                } else if (robotVacuum.direction === Direction.WEST) {
-                    robotVacuum.direction = Direction.NORTH;
-                }
-            } else if (command instanceof ReportCommand) {
-                setTimeout(() => {
-                    setProcessing(false);
-                }, 300);
-                let content: string = "";
-                if (hasError) {
-                    content = errorMessage;
-                } else {
-                    content = robotVacuum.position.x + "," + robotVacuum.position.y + "," + robotVacuum.direction;
-                }
-                addMessage(content, MessageType.RECEIVE);
-                setScrollToBottom(true);
-                setShowViewPositionButton(true);
+
+        if (hasPlaceCommand) {
+            if (indexOfFirstPlaceCommand !== 0) {
+                validCommands.splice(0, indexOfFirstPlaceCommand);
             }
-            setRobotVacuum(robotVacuum);
-            
-        });
+
+            let position: Position = { x: MIN_POSITION_X, y: MIN_POSITION_Y };
+            let direction: Direction = Direction.NORTH;
+            let newRobotVacuum: RobotVacuum = {
+                position: position,
+                direction: direction
+            }
+
+            if (robotVacuum) {
+                newRobotVacuum.position.x = robotVacuum.position.x;
+                newRobotVacuum.position.y = robotVacuum.position.y;
+                newRobotVacuum.direction = robotVacuum.direction;
+            }
+
+            let hasError: boolean = false;
+            let errorMessage: string = "";
+
+            validCommands.filter(command => !command.executed)
+                .forEach(command => {
+                    if (command instanceof PlaceCommand) {
+                        const placeCommand: PlaceCommand = command as PlaceCommand;
+                        if (placeCommand.position.x >= MIN_POSITION_X && placeCommand.position.y >= MIN_POSITION_Y && placeCommand.position.x <= MAX_POSITION_X && placeCommand.position.y <= MAX_POSITION_Y) {
+                            newRobotVacuum.position.x = placeCommand.position.x;
+                            newRobotVacuum.position.y = placeCommand.position.y;
+                            newRobotVacuum.direction = placeCommand.direction;
+                            command.executed = true;
+                        } else {
+                            hasError = true;
+                            errorMessage = "Please enter a PLACE command that is within " + MIN_POSITION_X + "," + MIN_POSITION_Y + " and " + MAX_POSITION_X + "," + MAX_POSITION_Y + ".";
+                        }
+                    } else if (command instanceof MoveCommand && !hasError) {
+                        if (newRobotVacuum.direction === Direction.NORTH) {
+                            const plannedPositionY = newRobotVacuum.position.y + 1;
+                            if (plannedPositionY <= MAX_POSITION_Y) {
+                                newRobotVacuum.position.y = plannedPositionY;
+                                command.executed = true;
+                            }
+                        } else if (newRobotVacuum.direction === Direction.SOUTH) {
+                            const plannedPositionY = newRobotVacuum.position.y - 1;
+                            if (plannedPositionY >= MIN_POSITION_Y) {
+                                newRobotVacuum.position.y = plannedPositionY;
+                                command.executed = true;
+                            }
+                        } else if (newRobotVacuum.direction === Direction.EAST) {
+                            const plannedPositionX = newRobotVacuum.position.x + 1;
+                            if (plannedPositionX <= MAX_POSITION_X) {
+                                newRobotVacuum.position.x = plannedPositionX;
+                                command.executed = true;
+                            }
+                        } else if (newRobotVacuum.direction === Direction.WEST) {
+                            const plannedPositionX = newRobotVacuum.position.x - 1;
+                            if (plannedPositionX >= MIN_POSITION_X) {
+                                newRobotVacuum.position.x = plannedPositionX;
+                                command.executed = true;
+                            }
+                        }
+                    } else if (command instanceof LeftCommand && !hasError) {
+                        if (newRobotVacuum.direction === Direction.NORTH) {
+                            newRobotVacuum.direction = Direction.WEST;
+                            command.executed = true;
+                        } else if (newRobotVacuum.direction === Direction.SOUTH) {
+                            newRobotVacuum.direction = Direction.EAST;
+                            command.executed = true;
+                        } else if (newRobotVacuum.direction === Direction.EAST) {
+                            newRobotVacuum.direction = Direction.NORTH;
+                            command.executed = true;
+                        } else if (newRobotVacuum.direction === Direction.WEST) {
+                            newRobotVacuum.direction = Direction.SOUTH;
+                            command.executed = true;
+                        }
+                    } else if (command instanceof RightCommand && !hasError) {
+                        if (newRobotVacuum.direction === Direction.NORTH) {
+                            newRobotVacuum.direction = Direction.EAST;
+                            command.executed = true;
+                        } else if (newRobotVacuum.direction === Direction.SOUTH) {
+                            newRobotVacuum.direction = Direction.WEST;
+                            command.executed = true;
+                        } else if (newRobotVacuum.direction === Direction.EAST) {
+                            newRobotVacuum.direction = Direction.SOUTH;
+                            command.executed = true;
+                        } else if (newRobotVacuum.direction === Direction.WEST) {
+                            newRobotVacuum.direction = Direction.NORTH;
+                            command.executed = true;
+                        }
+                    } else if (command instanceof ReportCommand) {
+                        setTimeout(() => {
+                            setProcessing(false);
+                        }, 300);
+                        let content: string = "";
+                        if (hasError) {
+                            content = errorMessage;
+                        } else {
+                            content = newRobotVacuum.position.x + "," + newRobotVacuum.position.y + "," + newRobotVacuum.direction;
+                        }
+                        addMessage(content, MessageType.RECEIVE);
+                        setScrollToBottom(true);
+                        setShowViewPositionButton(true);
+                        setValidCommands([]);
+                        command.executed = true;
+                    }
+                    setRobotVacuum(newRobotVacuum);
+                });
+        }
     }
 
     const handleOnClickViewPosition = () => {
@@ -248,16 +281,17 @@ const ChatContainer = () => {
         setShowViewPositionButton(false);
         setValidCommands([]);
         setMessages([]);
-        let position: Position = {
-            x: 0,
-            y: 0
-        };
+        setHasFirstPlaceCommand(false);
+
+        let position: Position = { x: MIN_POSITION_X, y: MIN_POSITION_Y };
         let direction: Direction = Direction.NORTH;
         let newRobotVacuum: RobotVacuum = {
             position: position,
             direction: direction
         }
+
         setRobotVacuum(newRobotVacuum);
+
         const bodyContent = bodyContentRef.current;
         if (bodyContent) {
             bodyContent.scrollTop = 0;
