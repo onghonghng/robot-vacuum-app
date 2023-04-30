@@ -100,7 +100,7 @@ const ChatContainer = () => {
         if (validCommandsFromInput.length === 0) {
             setProcessing(false);
         }
-console.log(validCommandsFromInput);
+
         setValidCommands(validCommandsFromInput);
         commandRobotVacuuum();
     }
