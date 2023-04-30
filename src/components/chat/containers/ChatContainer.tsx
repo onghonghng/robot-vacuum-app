@@ -23,6 +23,7 @@ const MIN_POSITION_X = 0;
 const MIN_POSITION_Y = 0;
 const MAX_POSITION_X = 5;
 const MAX_POSITION_Y = 5;
+
 const ChatContainer = () => {
 
     const [validCommands, setValidCommands] = useState<Command[]>([]);
@@ -153,7 +154,7 @@ const ChatContainer = () => {
                 validCommands.splice(0, indexOfFirstPlaceCommand);
             }
 
-            let position: Position = { x: 0, y: 0 };
+            let position: Position = { x: MIN_POSITION_X, y: MIN_POSITION_Y };
             let direction: Direction = Direction.NORTH;
             let newRobotVacuum: RobotVacuum = {
                 position: position,
@@ -165,7 +166,6 @@ const ChatContainer = () => {
                 newRobotVacuum.position.y = robotVacuum.position.y;
                 newRobotVacuum.direction = robotVacuum.direction;
             }
-
 
             let hasError: boolean = false;
             let errorMessage: string = "";
@@ -282,16 +282,16 @@ const ChatContainer = () => {
         setValidCommands([]);
         setMessages([]);
         setHasFirstPlaceCommand(false);
-        let position: Position = {
-            x: 0,
-            y: 0
-        };
+
+        let position: Position = { x: MIN_POSITION_X, y: MIN_POSITION_Y };
         let direction: Direction = Direction.NORTH;
         let newRobotVacuum: RobotVacuum = {
             position: position,
             direction: direction
         }
+
         setRobotVacuum(newRobotVacuum);
+
         const bodyContent = bodyContentRef.current;
         if (bodyContent) {
             bodyContent.scrollTop = 0;
