@@ -100,13 +100,14 @@ const ChatContainer = () => {
         if (validCommandsFromInput.length === 0) {
             setProcessing(false);
         }
-
+console.log(validCommandsFromInput);
         setValidCommands(validCommandsFromInput);
         commandRobotVacuuum();
     }
 
     const mapMessageToCommand = (message: string): Command | undefined => {
         message = message.toUpperCase();
+        message = message.trim();
         if (message.includes(CommandType.PLACE)) {
             let locationDirectionMessage = message.replace(CommandType.PLACE, "");
             locationDirectionMessage.trim();
