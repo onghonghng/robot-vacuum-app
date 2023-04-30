@@ -15,7 +15,7 @@ body {
     align-items: flex-start;
     transition: transform 0.3s ease-out;
     @media (max-width: 575px) {
-        max-height: calc(100vh - 86px - 64px - 16px);
+        max-height: calc(100vh - 86px - 64px - 32px);
     }
 }
 
