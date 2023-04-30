@@ -189,27 +189,24 @@ const ChatContainer = () => {
                             const plannedPositionY = newRobotVacuum.position.y + 1;
                             if (plannedPositionY <= MAX_POSITION_Y) {
                                 newRobotVacuum.position.y = plannedPositionY;
-                                command.executed = true;
                             }
                         } else if (newRobotVacuum.direction === Direction.SOUTH) {
                             const plannedPositionY = newRobotVacuum.position.y - 1;
                             if (plannedPositionY >= MIN_POSITION_Y) {
                                 newRobotVacuum.position.y = plannedPositionY;
-                                command.executed = true;
                             }
                         } else if (newRobotVacuum.direction === Direction.EAST) {
                             const plannedPositionX = newRobotVacuum.position.x + 1;
                             if (plannedPositionX <= MAX_POSITION_X) {
                                 newRobotVacuum.position.x = plannedPositionX;
-                                command.executed = true;
                             }
                         } else if (newRobotVacuum.direction === Direction.WEST) {
                             const plannedPositionX = newRobotVacuum.position.x - 1;
                             if (plannedPositionX >= MIN_POSITION_X) {
                                 newRobotVacuum.position.x = plannedPositionX;
-                                command.executed = true;
                             }
                         }
+                        command.executed = true;
                     } else if (command instanceof LeftCommand && !hasError) {
                         if (newRobotVacuum.direction === Direction.NORTH) {
                             newRobotVacuum.direction = Direction.WEST;
