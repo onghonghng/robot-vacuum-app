@@ -141,7 +141,6 @@ const ChatContainer = () => {
     }
 
     const commandRobotVacuuum = () => {
-        console.log(validCommands);
         const indexOfFirstPlaceCommand = validCommands.findIndex(command => command instanceof PlaceCommand);
         let hasPlaceCommand = hasFirstPlaceCommand;
         if (!hasFirstPlaceCommand) {
@@ -151,12 +150,9 @@ const ChatContainer = () => {
 
         if (hasPlaceCommand) {
             if (indexOfFirstPlaceCommand !== 0) {
-                // ignore all commands before PLACE
                 validCommands.splice(0, indexOfFirstPlaceCommand);
             }
-            console.log(validCommands);
 
-            // todo: valid if need to reset robot position and direction
             let position: Position = { x: 0, y: 0 };
             let direction: Direction = Direction.NORTH;
             let newRobotVacuum: RobotVacuum = {
